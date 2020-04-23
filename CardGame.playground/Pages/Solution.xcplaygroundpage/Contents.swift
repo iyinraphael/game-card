@@ -24,9 +24,7 @@ enum Rank: Int {
 
 
 extension Rank: CustomStringConvertible, Comparable {
-    static func < (lhs: Rank, rhs: Rank) -> Bool {
-        return lhs == rhs && rhs == lhs
-    }
+    
     
     var description: String {
         switch self {
@@ -59,6 +57,15 @@ extension Rank: CustomStringConvertible, Comparable {
     
         }
     }
+    
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+    
+    
+    static func == (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
 }
 
 
@@ -79,10 +86,20 @@ struct Card {
     let rank: Rank
 }
 
-extension Card: CustomStringConvertible {
+extension Card: CustomStringConvertible, Comparable {
+
+    
     var description: String {
         return "\(rank) of \(suit)"
     }
+    
+    static func < (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank < lhs.rank
+    }
+    
+    static func == (lhs: Card, rhs: Card) -> Bool {
+        return lhs.rank == rhs.rank && rhs.suit == lhs.suit
+       }
 }
 
 struct Deck {
@@ -125,12 +142,21 @@ class HighLow: CardGame {
     }
     
     func play() {
-        <#code#>
+        let player1  = drawCard()
+        let player2 = drawCard()
+        
+        if player1.rank == player2.rank && player2.suit == player1.suit {
+            print("Round ends in a tie with \(player1.rank) of \(player2.suit)")
+        } else if player1.rank > player2.rank {
+            print("Player 1 wins with \(player1.rank) of \(player1.suit)")
+        } else if player2.rank > player1.rank {
+            print("Player 2 wins with \(player2.rank) of \(player2.suit)")
+        }
     }
-
-    
-    
 }
+
+
+
 
 
 
