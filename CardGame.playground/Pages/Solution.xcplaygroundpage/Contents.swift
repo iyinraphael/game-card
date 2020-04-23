@@ -16,10 +16,18 @@ enum Rank: Int {
     case jack
     case queen
     case king
+    
+    static var allRanks: [Rank] {
+        return [ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king]
+    }
 }
 
 
-extension Rank: CustomStringConvertible {
+extension Rank: CustomStringConvertible, Comparable {
+    static func < (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs == rhs && rhs == lhs
+    }
+    
     var description: String {
         switch self {
         case .ace:
@@ -59,8 +67,11 @@ enum Suit: String {
     case diamonds
     case spades
     case clubs
+    
+    static var allsuit: [Suit]{
+        return [hearts, diamonds, spades, clubs]
+    }
 }
-
 
 struct Card {
     
@@ -68,7 +79,58 @@ struct Card {
     let rank: Rank
 }
 
+extension Card: CustomStringConvertible {
+    var description: String {
+        return "\(rank) of \(suit)"
+    }
+}
 
+struct Deck {
+    var cardArray: [Card]
+    
+    init(cardArray: [Card]) {
+        self.cardArray = cardArray
+        for rank in Rank.allRanks {
+            for suit in Suit.allsuit {
+                let card = Card(suit: suit, rank: rank)
+                self.cardArray.append(card)
+            }
+        }
+    }
+}
+
+func drawCard() -> Card {
+    let cardArray = [Card]()
+    let deck =  Deck(cardArray: cardArray)
+    
+    let number = Int.random(in: 0...52)
+    let card = deck.cardArray[number]
+    
+    return card
+}
+
+protocol CardGame {
+    
+    var deck: Deck {get}
+    
+    func play()
+    
+}
+
+class HighLow: CardGame {
+    var deck: Deck
+    
+    init(deck: Deck) {
+        self.deck = deck
+    }
+    
+    func play() {
+        <#code#>
+    }
+
+    
+    
+}
 
 
 
